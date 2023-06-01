@@ -7,9 +7,11 @@ module.exports = {
   ],
   theme: {
     colors: {
+      transparent: 'transparent',
       'primary': '#b8252b',
       'gray': '#d9d9d9',
       'semigray': '(217, 217, 217, 0.9)',
+      'white': '#ffffff',
     },
     extend: {
       backgroundImage: {
@@ -20,9 +22,7 @@ module.exports = {
     },
   },
   plugins: [
-    require('@tailwindcss/forms')({
-      strategy: 'base',
-      strategy: 'class',
+    require("@tailwindcss/forms")({
     }),
   ],
 }
