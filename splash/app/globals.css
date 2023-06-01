@@ -1,0 +1,9 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  background-image: url('SPIRE.jpg');
+  background-color: #555;
+  background-size: cover;
+}
