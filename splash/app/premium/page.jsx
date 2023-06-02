@@ -1,11 +1,40 @@
 'use client'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import { useRouter } from 'next/navigation'
+import Cookies from 'universal-cookie'
 
 const premium = () => {
+    const [firstname, setFirstname] = useState("")
+    const [lastname, setLastname] = useState("")
+    const [email, setEmail] = useState("")
+    const [selectedPass, setSelectedPass] = useState("https://buy.stripe.com/test_fZeeYf5G47yrfYc9AA")
     const [showInfo, setShowInfo] = useState(false)
     const [showTerms, setShowTerms] = useState(false)
     const [showPrivacy, setShowPrivacy] = useState(false)
+    
+    const params = new URLSearchParams(window.location.search)
+    const cookies = new Cookies()
+    const router = useRouter()
 
+    const base_grant_url = params.get('base_grant_url')
+    const user_continue_url = params.get('user_continue_url')
+    const gateway_id = params.get('gateway_id')
+    const node_id = params.get('node_id')
+    const node_mac = params.get('node_mac')
+    const client_ip = params.get('client_ip')
+    const client_mac = params.get('client_mac')
+
+    
+    useEffect(() => {
+        cookies.set('base_grant_url', base_grant_url, { path: '/' })
+        cookies.set('user_continue_url', user_continue_url, { path: '/' })
+        cookies.set('gateway_id', gateway_id, { path: '/' })
+        cookies.set('node_id', node_id, { path: '/' })
+        cookies.set('node_mac', node_mac, { path: '/' })
+        cookies.set('client_ip', client_ip, { path: '/' })
+        cookies.set('client_mac', client_mac, { path: '/' })
+    }, [])
+    
     const toggleShow = (e) => {
         e.preventDefault()
         if (e.target.value === "info") {
@@ -17,9 +46,19 @@ const premium = () => {
         }
         console.log(e.target.id)
     }
+    
+    const handleSubmit = (e) => {
+        e.preventDefault()
+        cookies.set('firstname', firstname, { path: '/' })
+        cookies.set('lastname', lastname, { path: '/' })
+        cookies.set('email', email, { path: '/' })
+        cookies.set('selectedPass', selectedPass, { path: '/' })
 
+        // router.push(selectedPass)
+    }
+    
     return (
-      <section className="w-full">
+        <section className="w-full">
         <div className="grid place-content-center mt-24 mb-10">
             <div className="flex flex-col bg-gray/80 md:w-4/5 w-5/6 mx-auto">
                 <div className="flex justify-between">
@@ -31,11 +70,11 @@ const premium = () => {
                 </div>
                 <div className="mx-auto mt-5 w-5/6">
                     <p className="font-medium text-center break-normal">To connect to our premium Wi-Fi, please fill out the information below</p>
-                    <form action="#">
+                    <form onSubmit={handleSubmit}>
                         <div className="grid grid-cols-1 gap-6 my-5 mx-5">
                             <label className="block">
                                 <span className="text-gray-700">First Name</span>
-                                <input type="text" className="
+                                <input type="text" onChange={(e)=>setFirstname(e.target.value)} className="
                                     mt-0
                                     block
                                     w-full
@@ -48,7 +87,7 @@ const premium = () => {
                             </label>
                             <label className="block">
                                 <span className="text-gray-700">Last Name</span>
-                                <input type="text" className="
+                                <input type="text" onChange={(e)=>setLastname(e.target.value)} className="
                                     mt-0
                                     block
                                     w-full
@@ -61,7 +100,7 @@ const premium = () => {
                             </label>
                             <label className="block">
                                 <span className="text-gray-700">Email Address</span>
-                                <input type="email" className="
+                                <input type="email" onChange={(e)=>setEmail(e.target.value)} className="
                                     mt-0
                                     block
                                     w-full
@@ -74,7 +113,7 @@ const premium = () => {
                             </label>
                             <label class="block">
                                 <span class="text-gray-700">Please select a Wifi-Pass from the list below</span>
-                                <select class="
+                                <select onChange={(e)=>setSelectedPass(e.target.value)} class="
                                     block
                                     w-full
                                     mt-0
@@ -84,13 +123,13 @@ const premium = () => {
                                     bg-transparent
                                     focus:ring-0 focus:border-black
                                 ">
-                                    <option value={"https://buy.stripe.com/test_fZeeYf5G47yrfYc9AA"}>1 Day Pass - $15</option>
-                                    <option>2 Day Pass - $30</option>
+                                    <option value={"https://buy.stripe.com/test_fZeeYf5G47yrfYc9AA"} defaultChecked>1 Day Pass - $15</option>
+                                    <option value={"https://buy.stripe.com/test_6oEdUb1pO9Gz9zO8wx"}>2 Day Pass - $30</option>
                                     <option>5 Day Pass - $65</option>
                                     <option>7 Day Pass - $70</option>
                                 </select>
                             </label>
-                            <button className="
+                            <button type='submit' className="
                                 bg-primary
                                 hover:bg-primary/80
                                 text-white
